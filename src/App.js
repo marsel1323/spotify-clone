@@ -20,6 +20,11 @@ function App() {
         // window.location.search = "";
         let {code} = hash;
 
+        dispatch({
+            type: 'SET_SPOTIFY',
+            spotify,
+        })
+
         if (code) {
             requestAccessAndRefreshTokens(code)
                 .then(response => {

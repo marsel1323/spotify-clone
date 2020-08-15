@@ -1,13 +1,13 @@
 import React from "react";
 import "./SidebarOption.css";
 
-function SidebarOption({ option = "test", Icon }) {
-  return (
-    <div className="sidebarOption">
-      {Icon && <Icon className="sidebarOption__icon" />}
-      {Icon ? <h4>{option}</h4> : <p>{option}</p>}
-    </div>
-  );
+function SidebarOption({option, Icon, selectPlaylist}) {
+    return (
+        <div className="sidebarOption" onClick={() => selectPlaylist(option.id)}>
+            {Icon && <Icon className="sidebarOption__icon"/>}
+            {Icon ? <h4>{option.name}</h4> : <p>{option.name}</p>}
+        </div>
+    );
 }
 
 export default SidebarOption;
