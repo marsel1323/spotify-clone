@@ -1,14 +1,14 @@
 import React from "react";
 import "./Body.css";
 import Header from "./Header";
-import { useStateValue } from "./StateProvider";
+import { useStateValue } from "../StateProvider";
 import SongRow from "./SongRow";
 import PlayCircleFilledIcon from "@material-ui/icons/PlayCircleFilled";
 import FavoriteIcon from "@material-ui/icons/Favorite";
 import MoreHorizIcon from "@material-ui/icons/MoreHoriz";
 
 function Body({ spotify }) {
-  const [{ discover_weekly }, dispatch] = useStateValue();
+  const [{ playlist }, dispatch] = useStateValue();
 
   const playPlaylist = (id) => {
     spotify
@@ -53,11 +53,11 @@ function Body({ spotify }) {
       <Header spotify={spotify} />
 
       <div className="body__info">
-        <img src={discover_weekly?.images[0].url} alt="" />
+        <img src={playlist?.images[0].url} alt="" />
         <div className="body__infoText">
           <strong>PLAYLIST</strong>
           <h2>Discover Weekly</h2>
-          <p>{discover_weekly?.description}</p>
+          <p>{playlist?.description}</p>
         </div>
       </div>
 
@@ -71,7 +71,7 @@ function Body({ spotify }) {
           <MoreHorizIcon />
         </div>
 
-        {discover_weekly?.tracks.items.map((item) => (
+        {playlist?.tracks.items.map((item) => (
           <SongRow playSong={playSong} track={item.track} />
         ))}
       </div>

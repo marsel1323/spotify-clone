@@ -1,10 +1,10 @@
 import React, {useEffect} from "react";
 import SpotifyWebApi from "spotify-web-api-js";
 import {useStateValue} from "./StateProvider";
-import Player from "./Player";
-import {getTokenFromResponse} from "./spotify";
+import Player from "./components/Player";
+import {getTokenFromResponse} from "./utils/spotify";
 import "./App.css";
-import Login from "./Login";
+import Login from "./components/Login";
 
 const spotify = new SpotifyWebApi();
 
@@ -50,7 +50,7 @@ function App() {
                 .then((response) =>
                     dispatch({
                         type: "SET_PLAYLIST",
-                        discover_weekly: response,
+                        playlist: response,
                     })
                 );
 
