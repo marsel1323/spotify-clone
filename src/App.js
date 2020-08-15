@@ -1,71 +1,75 @@
-import React, { useEffect } from "react";
+import React, {useEffect} from "react";
 import SpotifyWebApi from "spotify-web-api-js";
-import { useStateValue } from "./StateProvider";
+import {useStateValue} from "./StateProvider";
 import Player from "./Player";
-import { getTokenFromResponse } from "./spotify";
+import {getTokenFromResponse} from "./spotify";
 import "./App.css";
 import Login from "./Login";
 
-const s = new SpotifyWebApi();
+const spotify = new SpotifyWebApi();
 
 function App() {
-  const [{ token }, dispatch] = useStateValue();
+    const [{token}, dispatch] = useStateValue();
 
-  useEffect(() => {
-    // Set token
-    const hash = getTokenFromResponse();
-    window.location.hash = "";
-    let _token = hash.access_token;
+    useEffect(() => {
+        // Set token
+        const hash = getTokenFromResponse();
+        window.location.hash = "";
+        let _token = hash.access_token;
 
-    if (_token) {
-      s.setAccessToken(_token);
+        if (_token) {
+            dispatch({
+                type: "SET_SPOTIFY",
+                spotify: spotify,
+            });
 
-      dispatch({
-        type: "SET_TOKEN",
-        token: _token,
-      });
+            spotify.setAccessToken(_token);
 
-      s.getPlaylist("37i9dQZEVXcJZyENOWUFo7").then((response) =>
-        dispatch({
-          type: "SET_DISCOVER_WEEKLY",
-          discover_weekly: response,
-        })
-      );
+            dispatch({
+                type: "SET_TOKEN",
+                token: _token,
+            });
 
-      s.getMyTopArtists().then((response) =>
-        dispatch({
-          type: "SET_TOP_ARTISTS",
-          top_artists: response,
-        })
-      );
+            spotify.getMe()
+                .then((user) => {
+                    dispatch({
+                        type: "SET_USER",
+                        user,
+                    });
+                });
 
-      dispatch({
-        type: "SET_SPOTIFY",
-        spotify: s,
-      });
+            spotify.getUserPlaylists()
+                .then((playlists) => {
+                    dispatch({
+                        type: "SET_PLAYLISTS",
+                        playlists,
+                    });
+                });
 
-      s.getMe().then((user) => {
-        dispatch({
-          type: "SET_USER",
-          user,
-        });
-      });
+            spotify.getPlaylist("7HUYJLFoNigH3QInjpjjEa")
+                .then((response) =>
+                    dispatch({
+                        type: "SET_PLAYLIST",
+                        discover_weekly: response,
+                    })
+                );
 
-      s.getUserPlaylists().then((playlists) => {
-        dispatch({
-          type: "SET_PLAYLISTS",
-          playlists,
-        });
-      });
-    }
-  }, [token, dispatch]);
+            spotify.getMyTopArtists()
+                .then((response) =>
+                    dispatch({
+                        type: "SET_TOP_ARTISTS",
+                        top_artists: response,
+                    })
+                );
+        }
+    }, [token, dispatch]);
 
-  return (
-    <div className="app">
-      {!token && <Login />}
-      {token && <Player spotify={s} />}
-    </div>
-  );
+    return (
+        <div className="app">
+            {!token && <Login/>}
+            {token && <Player spotify={spotify}/>}
+        </div>
+    );
 }
 
 export default App;
