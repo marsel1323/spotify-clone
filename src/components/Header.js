@@ -4,8 +4,8 @@ import { useStateValue } from "../StateProvider";
 import { Avatar } from "@material-ui/core";
 import SearchIcon from "@material-ui/icons/Search";
 
-function Header({ spotify }) {
-  const [{ user }, dispatch] = useStateValue();
+function Header() {
+  const [{ user }] = useStateValue();
 
   return (
     <div className="header">

@@ -1,5 +1,3 @@
-import { findAllByDisplayValue } from "@testing-library/react";
-
 export const initialState = {
   user: null,
   playlists: [],
@@ -8,11 +6,24 @@ export const initialState = {
   top_artists: null,
   playing: false,
   item: null,
+
+  accessToken:localStorage.getItem('accessToken'),
+  refreshToken: localStorage.getItem('refreshToken'),
+  expiresIn: localStorage.getItem('expiresIn'),
 };
 
 const reducer = (state, action) => {
   console.log(action);
   switch (action.type) {
+    case "SET_TOKEN":
+      localStorage.setItem('accessToken', action.token.accessToken);
+      localStorage.setItem('refreshToken', action.token.refreshToken);
+      localStorage.setItem('expiresIn', action.token.expiresIn);
+      return {
+        ...state,
+        ...action.token,
+      };
+
     case "SET_USER":
       return {
         ...state,
@@ -41,12 +52,6 @@ const reducer = (state, action) => {
       return {
         ...state,
         top_artists: action.top_artists,
-      };
-
-    case "SET_TOKEN":
-      return {
-        ...state,
-        token: action.token,
       };
 
     case "SET_SPOTIFY":
